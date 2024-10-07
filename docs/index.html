@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="A versatile pipeline for controllable 3D virtual try-on with Gaussian Splatting">
+  <meta name="keywords" content="3D generative model, diffusion models, virtual try-on">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GS-VTON</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+  
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/result.css">
+  <!-- <link rel="icon" href="./static/images/favicon.svg"> -->
+
+
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">GS-VTON: Controllable 3D Virtual Try-on with Gaussian Splatting</h1>
+          <div class="is-size-4 publication-authors">
+            <span class="author-block">
+              <a href="https://yukangcao.github.io/">Yukang Cao</a><sup>1*</sup>,</span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Masoud_Hadi1">Masoud Hadi</a><sup>2*</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=lSDISOcAAAAJ&hl=zh-CN">Liang Pan</a><sup>2†</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://liuziwei7.github.io/">Ziwei Liu</a><sup>1†</sup>
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="footnote"><sup>*</sup>Equal contributions  <sup>†</sup>Corresponding authors</span>
+          </div>
+          <div class="is-size-6 publication-authors">
+            <p>
+            <span class="author-block"><sup>1</sup>Nanyang Technological University <sup>2</sup>Shanghai AI Laboratory</span>  <sup>3</sup>Isfahan University of Technology</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            Preprint 2024
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/yukangcao/GS-VTON"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="my-hr">
+  <hr>
+</div>
+
+<section class="section">
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <table>
+          <tr>
+            <td><img src="./static/GS-VTON-teaser.png"></td>
+          </tr>
+
+        </table>
+        <div class="content has-text-justified">
+          <p>
+          Given a garment image and multi-view human datasets, GS-VTON effectively achieves fine-grained virtual try-on that maintains the original identity while reflecting the characteristic of the target garment.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Diffusion-based 2D virtual try-on (VTON) techniques have recently demonstrated strong performance, while the development of 3D VTON has largely lagged behind. Despite recent advances in text-guided 3D scene editing, integrating 2D VTON into these pipelines to achieve vivid 3D VTON remains challenging. The reasons are twofold. First, text prompts cannot provide sufficient details in describing clothing. Second, 2D VTON results generated from different viewpoints of the same 3D scene lack coherence and spatial relationships, hence frequently leading to appearance inconsistencies and geometric distortions. To resolve these problems, we introduce an image-prompted 3D VTON method (dubbed \OM) which, by leveraging 3D Gaussian Splatting (3DGS) as the 3D representation, enables the transfer of pre-trained knowledge from 2D VTON models to 3D while improving cross-view consistency. <strong>(1)</strong> Specifically, we propose a personalized diffusion model that utilizes low-rank adaptation (LoRA) fine-tuning to incorporate personalized information into pre-trained 2D VTON models. To achieve effective LoRA training, we introduce a reference-driven image editing approach that enables the simultaneous editing of multi-view images while ensuring consistency. <strong>(2)</strong> Furthermore, we propose a persona-aware 3DGS editing framework to facilitate effective editing while maintaining consistent cross-view appearance and high-quality 3D geometry. <strong>(3)</strong> Additionally, we have established a new 3D VTON benchmark, 3D-VTONBench, which facilitates comprehensive qualitative and quantitative 3D VTON evaluations. Through extensive experiments and comparative analyses with existing methods, the proposed \OM has demonstrated superior fidelity and advanced editing capabilities, affirming its effectiveness for 3D VTON.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3">Method</h2>
+            <div class="content has-text-justified">
+              <p>
+
+              </p>
+            </div>
+            <img src="./static/fig_pipeline.png" witdh="1000">
+              <p>
+              We enable 3D virtual try-on by leveraging knowledge from pre-trained 2D diffusion models and extending it into 3D space. <strong>(1)</strong> We introduce a reference-driven image editing method that facilitates consistent multi-view edits. <strong>(2)</strong> We utilize low-rank adaptation (LoRA) to develop a personalized inpainting diffusion model based on previously edited images. <strong>(3)</strong> The core of our network is the persona-aware 3DGS editing which, by leveraging the personalized diffusion model, respects two predicted attention features-one for editing and the other for ensuring coherence across different viewpoints-allowing for multi-view consistent 3D virtual try-on.
+              </p>
+          </div>
+        </div>
+
+      </div>
+
+    <hr>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">3D virtual try-on Results</h2>
+        
+        <table>
+
+          <tr>
+            <video controls autoplay loop muted>
+                <source src="./static/mp4/webpage-video5.mp4" type="video/mp4">
+            </video>
+
+          </tr>
+
+
+          <tr>
+            <video controls autoplay loop muted>
+                <source src="./static/mp4/webpage-video6.mp4" type="video/mp4">
+            </video>
+
+
+          </tr>
+
+          <tr>
+            <video controls autoplay loop muted>
+                <source src="./static/mp4/webpage-video1.mp4" type="video/mp4">
+            </video>
+
+
+
+          </tr>
+
+          <tr>
+            <video controls autoplay loop muted>
+                <source src="./static/mp4/webpage-video2.mp4" type="video/mp4">
+            </video>
+
+
+          </tr>
+
+          <tr>
+            <video controls autoplay loop muted>
+                <source src="./static/mp4/webpage-video3.mp4" type="video/mp4">
+            </video>
+
+
+          </tr>
+
+          <tr>
+            <video controls autoplay loop muted>
+                <source src="./static/mp4/webpage-video4.mp4" type="video/mp4">
+            </video>
+
+
+          </tr>
+
+
+        </table>
+      </div>
+    </div>
+
+    <hr>
+
+
+<div class="columns is-centered has-text-centered">
+  <div class="column is-full-width">
+    <h2 class="title is-3">Qualitative Comparisons</h2>
+    <div class="slideshow-container" style="display: flex; justify-content: center; align-items: center; position: relative;">
+        <div style="position: relative;">
+      <video class="slide" controls autoplay loop muted style="width: 100%; max-width: 1300px; height: auto;">
+        <source src="./static/mosaic-gif/v22.mp4" type="video/mp4">
+      </video>
+      <video class="slide" controls autoplay loop muted style="width: 100%; max-width: 1300px; height: auto;">
+        <source src="./static/mosaic-gif/v3.mp4" type="video/mp4">
+      </video>
+      <video class="slide" controls autoplay loop muted style="width: 100%; max-width: 1300px; height: auto;">
+        <source src="./static/mosaic-gif/v17.mp4" type="video/mp4">
+      </video>
+      <video class="slide" controls autoplay loop muted style="width: 100%; max-width: 1300px; height: auto;">
+        <source src="./static/mosaic-gif/v15.mp4" type="video/mp4">
+      </video>
+      <video class="slide" controls autoplay loop muted style="width: 100%; max-width: 1300px; height: auto;">
+        <source src="./static/mosaic-gif/v12.mp4" type="video/mp4">
+      </video>
+      <video class="slide" controls autoplay loop muted style="width: 100%; max-width: 1300px; height: auto;">
+        <source src="./static/mosaic-gif/v10.mp4" type="video/mp4">
+      </video>
+      <video class="slide" controls autoplay loop muted style="width: 100%; max-width: 1300px; height: auto;">
+        <source src="./static/mosaic-gif/v9.mp4" type="video/mp4">
+      </video>
+      <video class="slide" controls autoplay loop muted style="width: 100%; max-width: 1300px; height: auto;">
+        <source src="./static/mosaic-gif/v6.mp4" type="video/mp4">
+      </video>
+
+
+      <div class="navigation-dots" style="margin-top: 10px; display: flex; justify-content: center; position: relative; z-index: 20;">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <button class="button prev" 
+            onclick="changeSlide(-1)" 
+            style="margin-left: -100px;z-index: 10; position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"> 
+        &#10094;
+      </button>
+      <button class="button next" 
+            onclick="changeSlide(1)" 
+            style="margin-right: -100px;z-index: 10; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"> 
+        &#10095;
+      </button>
+  </div>
+
+
+</div>
+</div>
+</div>
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>
+        @inproceedings{,
+        }
+    </code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is constructed using the source code provided by <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>, and we are grateful for the template they provided.
+            Allow us to express our appreciation for their contribution.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+let currentSlideIndex = 0;
+
+function changeSlide(step) {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+
+    slides[currentSlideIndex].style.display = 'none'; // Hide current slide
+    dots[currentSlideIndex].classList.remove('active'); // Remove active class from current dot
+
+    currentSlideIndex = (currentSlideIndex + step + slides.length) % slides.length;
+
+    slides[currentSlideIndex].style.display = 'block'; // Show new slide
+    dots[currentSlideIndex].classList.add('active'); // Add active class to new dot
+}
+
+// Initial setup to hide all slides except the first one
+document.querySelectorAll('.slide').forEach((slide, index) => {
+    slide.style.display = (index === 0) ? 'block' : 'none'; // Show the first slide and hide others
+});
+
+// Automatically change slides every 10 seconds
+setInterval(() => {
+    changeSlide(1);
+}, 10000); // Change slide every 10 seconds
+
+// Update display initially
+document.querySelectorAll('.dot')[currentSlideIndex].classList.add('active'); // Set first dot active
+</script>
+</section>  
+
+</html>
