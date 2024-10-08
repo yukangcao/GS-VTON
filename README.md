@@ -8,7 +8,7 @@
 <a href="https://liuziwei7.github.io/">Ziwei Liu</a><sup>†</sup>
 
 
-[![Paper](http://img.shields.io/badge/Paper-arxiv.2306.03038-B31B1B.svg)]()
+[![Paper](http://img.shields.io/badge/Paper-arxiv.2410.05259-B31B1B.svg)](https://arxiv.org/abs/2410.05259)
 <a href="https://yukangcao.github.io/GS-VTON/"><img alt="page" src="https://img.shields.io/badge/Webpage-0054a6?logo=Google%20chrome&logoColor=white"></a>
 
 <img src="./docs/static/mp4/webpage-video5-gif.gif">
@@ -30,6 +30,10 @@ Code will be released soon!
 ## Misc.
 If you want to cite our work, please use the following bib entry:
 ```
-@article{
+@article{cao2024gsvton,
+         title={GS-VTON: Controllable 3D Virtual Try-on with Gaussian Splatting},
+         author={Yukang Cao and Masoud Hadi and Liang Pan and Ziwei Liu},
+         journal={arXiv preprint arXiv:2410.05259},
+         year={2024}
 }
 ```
