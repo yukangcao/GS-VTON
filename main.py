@@ -120,7 +120,7 @@ def edit_gaussian_model(img_path, data_path, height, weight, gs_source, descript
     from ruamel.yaml import YAML
 
     # Define the YAML file path
-    yaml_file = "./configs/idm_20.yaml"
+    yaml_file = "./configs/gsvton.yaml"
 
     # Load the YAML file
     yaml = YAML()
