@@ -16,8 +16,8 @@ import time
 import json
 
 # from pytorch_lightning import seed_everything
-from preprocess.openpose.annotator.util import resize_image, HWC3
-from preprocess.openpose.annotator.openpose import OpenposeDetector
+from threestudio.preprocess.openpose.annotator.util import resize_image, HWC3
+from threestudio.preprocess.openpose.annotator.openpose import OpenposeDetector
 
 import argparse
 from PIL import Image
