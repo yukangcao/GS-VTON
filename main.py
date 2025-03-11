@@ -146,7 +146,7 @@ def edit_gaussian_model(img_path, data_path, height, weight, gs_source, descript
     subprocess.run([
         'python3', 'launch.py',
         f'timestamp={timestamp}',
-        '--config', './configs/idm_20.yaml',
+        '--config', './configs/gsvton.yaml',
         '--train',
         '--gpu', '0',
         'trainer.max_steps=4000',
