@@ -43,7 +43,7 @@ pip install -r requirements.txt
 ```
 
 ## 3DVTON Bench
-To be released...
+The collected 3DVTONBench is released at [3DVTONBench](https://entuedu-my.sharepoint.com/:f:/g/personal/yukang_cao_staff_main_ntu_edu_sg/EmQt2Bk1C_lDsMULDxoZbmABV0WzlqLDlLXTge5uuG7bVA?e=MRhbrv). We remove the facial identity due to privacy issues. Please refer to [NeRFStudio](https://docs.nerf.studio/quickstart/custom_dataset.html) if you want to use your custom data.
 
 ## Pre-trained model preparation
 Download the [densepose pre-trained weights](https://huggingface.co/yisol/IDM-VTON/blob/main/densepose/model_final_162be9.pkl), [openpose pre-trained weights](https://huggingface.co/yisol/IDM-VTON/tree/main/openpose/ckpts), and [humanparsing pre-trained weights](https://huggingface.co/yisol/IDM-VTON/tree/main/humanparsing)
